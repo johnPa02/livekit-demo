@@ -1,0 +1,15 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+docker/.env
+ivita-440104-fb2b5e47a223.json
+.idea/
+KMS/
+
+# Virtual environments
+.venv
