@@ -8,5 +8,6 @@ services:
       - .env
     volumes:
       - ../src:/app/src:cached
+      - ./gcp-key.json:/app/gcp-key.json
     restart: unless-stopped
     command: uv run python src/loan_agent.py dev
