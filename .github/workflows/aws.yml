@@ -1,0 +1,42 @@
+name: Deploy to Amazon EC2
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    environment: staging
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Deploy via SSH
+      uses: appleboy/ssh-action@v1.0.0
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USERNAME }}
+        key: ${{ secrets.EC2_PRIVATE_KEY }}
+        port: 22
+        script: |
+          cd /home/ubuntu/livekit-demo || git clone https://github.com/johnPa02/livekit-demo.git
+          cd livekit-demo
+          git fetch origin
+          git checkout main
+          git pull origin main
+
+          # Write file .env from GitHub Secrets
+          echo "${{ secrets.ENV_FILE }}" > docker/.env
+          # Write Write GCP credentials to file
+          echo '${{ secrets.GCP_CREDENTIALS }}' > $HOME/.json
+          
+          # Stop old containers
+          docker-compose -f docker/docker-compose.yml down || true
+
+          # Build & start new containers
+          docker-compose -f docker/docker-compose.yml up -d --build
+
+          echo "✅ Deployed successfully to EC2"
