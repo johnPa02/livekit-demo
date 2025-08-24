@@ -32,7 +32,7 @@ jobs:
           # Write file .env from GitHub Secrets
           echo "${{ secrets.ENV_FILE }}" > docker/.env
           # Write Write GCP credentials to file
-          echo '${{ secrets.GCP_CREDENTIALS }}' > $HOME/.json
+          echo '${{ secrets.GCP_CREDENTIALS }}' > docker/gcp-key.json
           
           # Stop old containers
           docker-compose -f docker/docker-compose.yml down || true
