@@ -1,0 +1,12 @@
+services:
+  livekit-worker:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    container_name: livekit-worker
+    env_file:
+      - .env
+    volumes:
+      - ../src:/app/src:cached
+    restart: unless-stopped
+    command: uv run python src/loan_agent.py dev
