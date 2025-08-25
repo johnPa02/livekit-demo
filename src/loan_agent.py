@@ -40,6 +40,7 @@ class CustomerInfo:
     tien_thanh_toan: str
     han_thanh_toan: str
     trang_thai: str
+    prefix: str
 
 current_time = datetime.now().strftime("%H:%M:%S %d/%m/%Y")
 class LoanCallAgent(Agent):
@@ -58,11 +59,12 @@ class LoanCallAgent(Agent):
         - Payment due: {customer.tien_thanh_toan}
         - Due date: {customer.han_thanh_toan}
         - Status: {customer.trang_thai}
+        - Prefix: {customer.prefix}
 
         Conversation guidelines:
         1. On the very first turn, always start with a friendly greeting, introduce yourself as an agent from ABC Bank,
            and immediately confirm if you are speaking to {customer.ten}, the owner of contract number {customer.so_hop_dong}.
-           - Use appropriate Vietnamese greetings like "Chào anh chị, em là Minh, nhân viên ngân hàng ABC". "Anh" or "chị" depends on the customer gender.
+           - Use appropriate Vietnamese greetings like "Chào {customer.prefix}, em là Minh, nhân viên ngân hàng ABC".
            - Only proceed if the customer confirms their identity.
         2. Clearly inform the customer about the loan details above.
         3. If the customer asks about anything outside of this loan information 
@@ -170,13 +172,14 @@ async def entrypoint(ctx: JobContext):
     khoan_vay = num_to_words(20000000)
     tien_thanh_toan = num_to_words(2000000)
     customer = CustomerInfo(
-        ten="Trần Thị Lan",
+        ten="Hoàng Anh",
         gioi_tinh="Nữ",
         so_hop_dong="1 9 2 7 3 7",
         khoan_vay=khoan_vay,
         tien_thanh_toan=tien_thanh_toan,
-        han_thanh_toan="25/08/2025",
+        han_thanh_toan="30/08/2025",
         trang_thai="Chưa thanh toán",
+        prefix="chị",
     )
 
     session = AgentSession[CustomerInfo](
@@ -213,7 +216,7 @@ async def entrypoint(ctx: JobContext):
         #     language='vi-VN',
         # ),
         userdata=customer,
-        user_away_timeout=10,
+        user_away_timeout=9,
     )
 
     inactivity_task: asyncio.Task | None = None
