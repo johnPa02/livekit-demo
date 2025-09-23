@@ -27,24 +27,17 @@ jobs:
 
           cd /home/ubuntu || exit 1
 
-          # Clone repo nếu chưa tồn tại
           if [ ! -d "livekit-demo" ]; then
             git clone https://github.com/johnPa02/livekit-demo.git
           fi
           cd livekit-demo
 
-          # Reset về code mới nhất từ remote main
           git fetch origin
           git reset --hard origin/main
 
-          # Ghi file secrets
           echo "${{ secrets.ENV_FILE }}" > docker/.env
           echo '${{ secrets.GCP_CREDENTIALS }}' > docker/gcp-key.json
-          
-          # Stop + remove orphan containers
-          docker-compose -f docker/docker-compose.yml down --remove-orphans || true
 
-          # Build & start lại
           docker-compose -f docker/docker-compose.yml up -d --build
 
           echo "✅ Deployed successfully to EC2"
