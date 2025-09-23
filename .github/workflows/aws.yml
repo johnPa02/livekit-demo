@@ -40,9 +40,6 @@ jobs:
           # Ghi file secrets
           echo "${{ secrets.ENV_FILE }}" > docker/.env
           echo '${{ secrets.GCP_CREDENTIALS }}' > docker/gcp-key.json
-          
-          # Stop + remove orphan containers
-          docker-compose -f docker/docker-compose.yml down --remove-orphans || true
 
           # Build & start lại
           docker-compose -f docker/docker-compose.yml up -d --build

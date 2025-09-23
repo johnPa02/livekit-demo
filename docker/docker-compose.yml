@@ -4,6 +4,8 @@ services:
       context: ..
       dockerfile: Dockerfile
     container_name: livekit-worker
+    networks:
+      - livekit_network
     env_file:
       - .env
     volumes:
@@ -11,3 +13,7 @@ services:
       - ./gcp-key.json:/app/gcp-key.json
     restart: unless-stopped
     command: uv run python src/booking_agent_intake.py dev
+
+networks:
+  livekit_network:
+    driver: bridge

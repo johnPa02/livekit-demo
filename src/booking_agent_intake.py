@@ -8,6 +8,7 @@ from utils.prompt_utils import load_prompt
 import logging
 
 load_dotenv()
+
 client = openai_sdk.OpenAI()
 logger = logging.getLogger("loan-agent")
 instructions = load_prompt("booking/intake.md", customer=None)
