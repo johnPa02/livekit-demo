@@ -10,4 +10,4 @@ services:
       - ../src:/app/src:cached
       - ./gcp-key.json:/app/gcp-key.json
     restart: unless-stopped
-    command: uv run python src/loan_agent.py dev
+    command: uv run python src/booking_agent_intake.py dev
