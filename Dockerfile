@@ -15,5 +15,3 @@ COPY src/ ./src
 # Create a non-root user and switch to it
 RUN useradd -m appuser
 USER appuser
-
-CMD ["uv", "run", "python", "src/loan_agent.py", "dev"]
