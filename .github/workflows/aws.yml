@@ -23,21 +23,28 @@ jobs:
         key: ${{ secrets.EC2_PRIVATE_KEY }}
         port: 22
         script: |
-          cd /home/ubuntu/livekit-demo || git clone https://github.com/johnPa02/livekit-demo.git
-          cd livekit-demo
-          git fetch origin
-          git checkout main
-          git pull origin main
+          set -e
 
-          # Write file .env from GitHub Secrets
+          cd /home/ubuntu || exit 1
+
+          # Clone repo nếu chưa tồn tại
+          if [ ! -d "livekit-demo" ]; then
+            git clone https://github.com/johnPa02/livekit-demo.git
+          fi
+          cd livekit-demo
+
+          # Reset về code mới nhất từ remote main
+          git fetch origin
+          git reset --hard origin/main
+
+          # Ghi file secrets
           echo "${{ secrets.ENV_FILE }}" > docker/.env
-          # Write Write GCP credentials to file
           echo '${{ secrets.GCP_CREDENTIALS }}' > docker/gcp-key.json
           
-          # Stop old containers
-          docker-compose -f docker/docker-compose.yml down || true
+          # Stop + remove orphan containers
+          docker-compose -f docker/docker-compose.yml down --remove-orphans || true
 
-          # Build & start new containers
+          # Build & start lại
           docker-compose -f docker/docker-compose.yml up -d --build
 
           echo "✅ Deployed successfully to EC2"
