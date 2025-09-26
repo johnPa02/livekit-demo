@@ -31,9 +31,9 @@ class BookingIntake(Agent):
             venue_name (str): Name of the venue to search for.
         """
         logger.info(f"Searching for venue: {venue_name}")
-        await context.session.generate_reply(
-            instructions="Inform the guest that you are looking for reservation information at {venue_name}, please wait a moment.",
-        )
+        # await context.session.generate_reply(
+        #     instructions="Inform the guest that you are looking for reservation information at {venue_name}, please wait a moment.",
+        # )
         query = f"How How to book a table at {venue_name}, including hotline, exact name of the restaurant, required information to book a table, opening and closing hours, priority for a few branches near the waterfront building 1A Ton Duc Thang, Saigon, District 1."
         response = client.responses.create(
             model="gpt-4.1",
