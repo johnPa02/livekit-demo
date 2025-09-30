@@ -2,7 +2,7 @@ import os
 from dotenv import load_dotenv
 from livekit import agents
 from livekit.agents import AgentSession, Agent, RoomInputOptions, function_tool, RunContext, UserInputTranscribedEvent
-from livekit.plugins import openai, noise_cancellation, silero
+from livekit.plugins import openai, noise_cancellation, silero, google
 import openai as openai_sdk
 from utils.prompt_utils import load_prompt
 import logging
@@ -51,7 +51,12 @@ async def entrypoint(ctx: agents.JobContext):
             speed=1.2,
             modalities=["text"],
         ),
-        tts=openai.TTS(voice="alloy", speed=1.2),
+        # tts=openai.TTS(voice="alloy", speed=1.2),
+        tts=google.TTS(
+            gender='male',
+            voice_name='vi-VN-Chirp3-HD-Iapetus',
+            language='vi-VN',
+        ),
     )
     @session.on("user_input_transcribed")
     def on_user_input_transcribed(event: UserInputTranscribedEvent):
